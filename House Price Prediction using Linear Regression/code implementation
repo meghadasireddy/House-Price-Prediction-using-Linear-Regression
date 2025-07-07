@@ -1,0 +1,79 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn .model_selection import train_test_split
+
+# load the dataset
+data = pd.read_csv("houseprice.csv")
+data
+
+http://data.info
+
+# select the feature (independent variable) and target (dependent variable) columns
+X = data['floors'].values
+y = data['price'].values
+X
+y
+# normalize the feature
+X = (X - np.mean(X)) / np.std(X)
+X
+from sklearn .model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=1/2,random_state=0)
+X_train= X_train.reshape(-1, 1)
+X_test= X_test.reshape(-1, 1)
+from sklearn.linear_model import LinearRegression
+regressor= LinearRegression()
+regressor.fit(X_train,y_train)
+y_pred=regressor.predict(X_test)
+y_pred
+print(regressor.intercept_)
+print(regressor.coef_)
+print(X_train.shape)
+print(X_test.shape)
+print(y_train.shape)
+print(y_test.shape)
+from sklearn import metrics
+print ('MAE:', metrics.mean_absolute_error(y_test, y_pred))
+print ('MSE:', metrics.mean_squared_error(y_test, y_pred))
+print ('RMSE:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+print(metrics.r2_score(y_test,y_pred))
+# set initial values for parameters (theta0 and theta1)
+theta0 = 0
+theta1 = 0
+
+# set the learning rate and number of iterations
+learning_rate = 0.01
+num_iterations = 1000
+# perform gradient descent
+m = len(y)
+for i in range(num_iterations):
+    h = theta0 + theta1*X
+    cost = np.sum((h - y)**2) / (2*m)
+    d_theta0 = np.sum(h - y) / m
+    d_theta1 = np.sum((h - y)*X) / m
+    theta0 = theta0 - learning_rate*d_theta0
+    theta1 = theta1 - learning_rate*d_theta1
+    # perform gradient descent
+m = len(y)
+for i in range(num_iterations):
+    h = theta0 + theta1*X
+    cost = np.sum((h - y)**2) / (2*m)
+    d_theta0 = np.sum(h - y) / m
+    d_theta1 = np.sum((h - y)*X) / m
+    theta0 = theta0 - learning_rate*d_theta0
+    theta1 = theta1 - learning_rate*d_theta1
+    # print the final values of parameters
+print("theta0: ", theta0)
+print("theta1: ", theta1)
+# plot the data and the linear regression line
+plt.scatter(X, y)
+plt.plot(X, theta0 + theta1*X, color='red')
+plt.xlabel('floors')
+plt.ylabel('Price')
+plt.show()
+# predict the house price for a given size
+floors = 2
+normalized_floors = (floors - np.mean(data['floors'])) / np.std(data['floors'])
+price = theta0 + theta1*normalized_floors
+print("Predicted price for size {}: Rs: {}".format(floors, price))
+
